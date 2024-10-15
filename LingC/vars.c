@@ -6,13 +6,14 @@ int main() {
 	int intA;
 	unsigned int b;
 	char c;
+	int vetorInt[20];
 
 	printf("Tamanho do char:     %ld\n", sizeof(char));
 	printf("Tamanho do int:      %ld\n", sizeof(intA));
 	printf("Tamanho do long int: %ld\n", sizeof(long int));
 	printf("Tamanho do float:    %ld\n", sizeof(float));
 	printf("Tamanho do double:   %ld\n", sizeof(double));
-	
+	printf("Tamanho do vetor com 20 inteiros: %ld\n", sizeof(vetorInt));	
 	printf("--------------------------\n\n");
 	
 	b = -2;

@@ -1,6 +1,7 @@
 // Implementação de ponteiros - Centraliza texto
 
 #include <stdio.h>
+#include <string.h>
 
 int tamanhoString( char *s ) {
 	int i=0;
@@ -58,7 +59,7 @@ int main(){
 	
 	centraliza(entrada, saida, tam);
 	
-	printf("X %s X\n", saida);
+	printf("X%sX\n", saida);
 	}
 
 

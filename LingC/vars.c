@@ -7,6 +7,13 @@ int main() {
 	unsigned int b;
 	char c;
 	int vetorInt[20];
+	
+	typedef struct  {
+		int x;
+		int y;
+		} COORDENADA;
+		
+	COORDENADA vcoord;
 
 	printf("Tamanho do char:     %ld\n", sizeof(char));
 	printf("Tamanho do int:      %ld\n", sizeof(intA));
@@ -14,6 +21,7 @@ int main() {
 	printf("Tamanho do float:    %ld\n", sizeof(float));
 	printf("Tamanho do double:   %ld\n", sizeof(double));
 	printf("Tamanho do vetor com 20 inteiros: %ld\n", sizeof(vetorInt));	
+	printf("Tamanho do tipo COORDENADA: %ld\n", sizeof( vcoord ));	
 	printf("--------------------------\n\n");
 	
 	b = -2;

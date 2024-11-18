@@ -5,13 +5,7 @@
 #include <string.h>
 
 #include "cadastro.h"
-
-#define TAM_LINHA_MAX 1000
-
-#define PEDACO	10000
-
-void pegaCampo(char *, int , char *);
-
+#include "util.h"
 
 int main() {
 	FILE *arquivo;

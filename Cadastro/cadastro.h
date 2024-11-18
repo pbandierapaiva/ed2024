@@ -1,5 +1,9 @@
 
 
+
+#define TAM_LINHA_MAX 1000
+#define PEDACO	10000
+
 typedef struct REG {
 	char id[20];
 	char nome[200];

@@ -1,4 +1,4 @@
-// Lista encadeada
+// Lista ligada
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,4 +1,4 @@
-// Lista encadeada usando 'typedef':   typedef struct no NO;
+// Lista ligada usando 'typedef':   typedef struct no NO;
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +10,7 @@ typedef struct no {
     struct no *proximo;
 } NO;
 
+// Insere nó no início da lista
 void insereNo( NO **cabecaLista, int val ) {
 
     NO *elemento, *p;
@@ -36,6 +37,7 @@ void insereNo( NO **cabecaLista, int val ) {
     p->proximo = elemento;
 }
 
+// Insere nó no início da lista
 void insereNoAlt( NO **cabecaLista, int val ) {
     NO *elemento;
 
@@ -74,6 +76,31 @@ void imprimeLista( NO *cabecaLista) {
     }
 }
 
+void apagaNo( NO **cabeca, NO *apagar) {
+    NO *p, **pPai;
+
+    pPai = cabeca;
+    p = *cabeca;
+    while( p ) {
+        if( p == apagar ) {
+            *pPai = p->proximo;
+            free(p);
+            return;
+        }
+        pPai = &(p->proximo);
+        p = p->proximo;
+    }
+}
+
+void apagaNoValor( NO **cabeca, int valorApagar) {
+    NO *p;
+
+    p = buscaNo(*cabeca, valorApagar);
+    if(!p) // Não encontrou
+        return;
+    apagaNo(cabeca, p);
+}
+
 void main() {
     NO *lista;
     //inicializa lista vazia
@@ -84,25 +111,27 @@ void main() {
     insereNo( &lista, 3);
     insereNo( &lista, 4);
     
-    imprimeLista(lista);
-
-    insereNoAlt( &lista, 1);
-    insereNoAlt( &lista, 2);
-    insereNoAlt( &lista, 3);
-    insereNoAlt( &lista, 4);
+    insereNoAlt( &lista, 5);
+    insereNoAlt( &lista, 6);
+    insereNoAlt( &lista, 7);
+    insereNoAlt( &lista, 8);
     
     imprimeLista(lista);
 
     // Teste do buscaNo
     NO *p=NULL;
-    p = buscaNo(lista, 3);
-    if(p)
-        printf("Encontrou nó 3\n");
+    p = buscaNo(lista, 6);
+    if(p) {
+        printf("Encontrou nó 6\nDELETANDO...\n");
+        apagaNo(&lista, p);
+    }
     else
-        printf("Não encontrou nó 3\n");
-    p = buscaNo(lista, 5);
-    if(p)
-        printf("Encontrou nó 5\n");
-    else
-        printf("Não encontrou nó 5\n");
+        printf("Não encontrou nó 6\n");
+
+    apagaNoValor(&lista,5);
+    apagaNoValor(&lista,3);
+    apagaNoValor(&lista,1);
+
+    imprimeLista(lista);
+    
 }

@@ -20,10 +20,10 @@ void insereNo( NOcadLL **cabecaLista, REGISTRO reg ) {
 
     // Não dá para copiar o registro inteiro, tem que ser por partes
     // elemento->registro = reg;
-    strcpy(reg.id, elemento->registro.id);
-    strcpy(reg.nome, elemento->registro.nome);
-    strcpy(reg.lotacao, elemento->registro.lotacao);
-    strcpy(reg.funcao, elemento->registro.funcao);
+    strcpy(elemento->registro.id, reg.id);
+    strcpy(elemento->registro.nome, reg.nome);
+    strcpy(elemento->registro.lotacao, reg.lotacao);
+    strcpy(elemento->registro.funcao, reg.funcao);
     elemento->proximo = NULL;
 
     //insere elemento ao final da lista
@@ -44,7 +44,50 @@ void imprimeLista( NOcadLL *cabecaLista) {
     printf("\nElementos da lista:\n");
     p = cabecaLista;
     while(p) {
-        printf("%s\n", p->registro.nome);
+        // printf("%s\n", p->registro.nome);
+        imprimeReg(p);
         p = p->proximo;
     }
+    printf("\n--------------------\nTamanho da lista: %d\n\n", tamanhoLista(cabecaLista));
+}
+
+NOcadLL *buscaNo( NOcadLL *r, char *s ) {
+    char *res;
+
+    while( r ) {
+        res = strstr( r->registro.nome, s);
+        if(res) {
+            return r;
+        }
+        r = r->proximo;
+    }
+    return r;
+}
+
+NOcadLL *buscaLista( NOcadLL *r, char *s ) {
+    NOcadLL *resultado = NULL;
+
+    while( r ) {
+        if( r->registro.nome == strstr( r->registro.nome, s) ){
+            insereNo(&resultado, r->registro);
+        }
+        r = r->proximo;
+    }
+    return resultado;
+}
+
+int tamanhoLista(NOcadLL *p ) {
+    int conta=0;
+
+    while(p) {
+        conta++;
+        p = p->proximo;
+    }
+    return conta;
+}
+
+void imprimeReg( NOcadLL *p ) {
+    if(!p) return;
+    printf("\nID %s\nNome: %s\nLotação: %s\nFunção: %s\n",
+        p->registro.id, p->registro.nome, p->registro.lotacao, p->registro.funcao);
 }

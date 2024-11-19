@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "cadastro.h"
 #include "util.h"
@@ -17,8 +18,13 @@ int main() {
 	int conta=0;
 
     NOcadLL *raiz=NULL;
+	NOcadLL *listaRes;
+
+	char sBusca[100];
 
     arquivo = fopen("/home/pub/ed/UNIFESP.csv","r");
+    // arquivo = fopen("/home/pub/ed/Cadastro.csv","r");
+
 	if( !arquivo ) {
 		printf("Erro de abertura de arquivo.\n\n");
 		return -1;
@@ -38,7 +44,24 @@ int main() {
         insereNo( &raiz, reg);
 		}
 
-	imprimeLista(raiz);
+	printf("\nEntre com texto para busca: ");
+	fgets(sBusca, 100, stdin);
+	for(char *cp=sBusca; *cp!='\0'; cp++ ) {
+		*cp = toupper(*cp);
+		if(*cp=='\n') *cp='\0';
+	}
+
+	printf("Procurando %s",sBusca);
+
+	listaRes = buscaLista( raiz, sBusca );
+	if(!listaRes){ // não encontrado
+		printf("Não encontrado.\n");
+	}
+	else {
+		imprimeLista(listaRes);
+	}
+
+
     fclose(arquivo);
 	return 0;
 }

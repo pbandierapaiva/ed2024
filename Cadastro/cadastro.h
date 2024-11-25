@@ -1,4 +1,4 @@
-
+/* Cadastro.h */
 
 
 #define TAM_LINHA_MAX 1000

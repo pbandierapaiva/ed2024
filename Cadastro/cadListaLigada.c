@@ -59,6 +59,8 @@ int main() {
 	}
 	else {
 		imprimeLista(listaRes);
+		printf("\nLista reversa\n");
+		imprimeListaInvertida(listaRes);
 	}
 
 

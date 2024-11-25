@@ -1,5 +1,6 @@
 // Fila usando lista ligada
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct no {
     // Dado

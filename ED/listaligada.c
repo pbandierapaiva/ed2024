@@ -10,7 +10,7 @@ typedef struct no {
     struct no *proximo;
 } NO;
 
-// Insere nó no início da lista
+// Insere nó no FIM da lista
 void insereNo( NO **cabecaLista, int val ) {
 
     NO *elemento, *p;

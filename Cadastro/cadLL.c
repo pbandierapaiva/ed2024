@@ -38,19 +38,6 @@ void insereNo( NOcadLL **cabecaLista, REGISTRO reg ) {
     p->proximo = elemento;
 }
 
-void imprimeLista( NOcadLL *cabecaLista) {
-    NOcadLL *p;
-
-    printf("\nElementos da lista:\n");
-    p = cabecaLista;
-    while(p) {
-        // printf("%s\n", p->registro.nome);
-        imprimeReg(p);
-        p = p->proximo;
-    }
-    printf("\n--------------------\nTamanho da lista: %d\n\n", tamanhoLista(cabecaLista));
-}
-
 NOcadLL *buscaNo( NOcadLL *r, char *s ) {
     char *res;
 
@@ -68,7 +55,7 @@ NOcadLL *buscaLista( NOcadLL *r, char *s ) {
     NOcadLL *resultado = NULL;
 
     while( r ) {
-        if( r->registro.nome == strstr( r->registro.nome, s) ){
+        if( strstr( r->registro.nome, s) ){
             insereNo(&resultado, r->registro);
         }
         r = r->proximo;
@@ -91,3 +78,34 @@ void imprimeReg( NOcadLL *p ) {
     printf("\nID %s\nNome: %s\nLotação: %s\nFunção: %s\n",
         p->registro.id, p->registro.nome, p->registro.lotacao, p->registro.funcao);
 }
+
+void imprimeLista( NOcadLL *cabecaLista) {
+    NOcadLL *p;
+
+    printf("\n\nElementos da lista:\n");
+    p = cabecaLista;
+    while(p) {
+        imprimeReg(p);
+        p = p->proximo;
+    }
+    printf("\n--------------------\nTamanho da lista: %d\n\n", tamanhoLista(cabecaLista));
+}
+
+void imprimeListaInvertida( NOcadLL *cabecaLista) {
+    NOcadLL *p, *q, *r;
+
+    p = cabecaLista;
+    q = NULL;
+    r = cabecaLista;
+
+    while(q != p) {
+        while( r->proximo != q) {
+            r = r->proximo;
+        }
+        imprimeReg(r);
+        q = r;
+        r = p;
+    }
+}
+
+

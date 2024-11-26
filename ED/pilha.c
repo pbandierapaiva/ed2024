@@ -40,6 +40,17 @@ int pop( NO **cabecaLista ) {
     return val;
 }
 
+int top(NO *cabecaLista){
+    return cabecaLista->valor;
+}
+
+int isEmpty(NO *cabecaLista) {
+    if(cabecaLista)
+        return 1;
+    else    
+        return 0;
+}
+
 int main() {
     NO *pilha=NULL; 
     int valor;

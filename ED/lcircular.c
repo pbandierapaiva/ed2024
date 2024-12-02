@@ -51,6 +51,8 @@ void removeNo(LDE **raiz, LDE *no) {
     else
         no->ant->prox = no->prox;
         no->prox->ant = no->ant;
+        if( no == *raiz )
+            *raiz = no->prox;
     free(no);    
 }
 void removeNoValor(LDE **raiz, int val) {

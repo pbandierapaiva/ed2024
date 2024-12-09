@@ -11,26 +11,42 @@ typedef struct no {
     struct no *pai;
 } NO;
 
-void insereNo(NO **raiz, int val) {
+NO *busca(NO *, int);
+
+NO *criaNo(int val, NO *pai) {
     NO *novoNo;
 
-    if(*raiz==NULL) {  //árvore vazia
-        novoNo = malloc( sizeof(NO));
-        if(!novoNo) {
-            printf("Erro de alocação de memória.\n");
-            exit(-1);
-        }
-        novoNo->valor = val;
-        novoNo->esq = NULL;
-        novoNo->dir = NULL;
-        novoNo->pai = (NO *)raiz;
-        *raiz = novoNo;
-        return;
+    novoNo = malloc( sizeof(NO));
+    if(!novoNo) {
+        printf("Erro de alocação de memória.\n");
+        exit(-1);
     }
-    if(val > (*raiz)->valor)     // maior
-        insereNo(  &((*raiz)->dir), val);
-    else   // menor ou igual
-        insereNo(  &((*raiz)->esq), val);
+    novoNo->valor = val;
+    novoNo->esq = NULL;
+    novoNo->dir = NULL;
+    novoNo->pai = pai;
+    return novoNo;
+}
+
+NO *insereNo(NO *raiz, int val ) {
+
+    if( raiz==NULL) {
+       return criaNo(val, NULL);
+    }
+
+    if( val > raiz->valor )  {   // maior
+        if(raiz->dir==NULL)
+            raiz->dir = criaNo(val, raiz);
+        else
+            insereNo(raiz->dir, val);
+    }
+    else {
+        if(raiz->esq==NULL)
+            raiz->esq  = criaNo(val, raiz);
+        else
+            insereNo(raiz->esq, val);
+    }
+    return raiz;
 }
 
 NO *proximo(NO *no) {
@@ -75,6 +91,46 @@ int altura(NO *no) {
         return aDir+1;
 }
 
+NO *removeNo( NO *raiz ) {
+    NO *p, *q;
+
+    if( raiz->esq==NULL) q=raiz->dir;
+    else {
+        p = raiz;
+        q = raiz->esq;
+        while( q->dir!=NULL ){
+            p = q;
+            q = q->dir;
+        }
+        if( p!= raiz) {
+            p->dir = q->esq;
+            q->esq = raiz->esq;
+        }
+        q->dir = raiz->dir;
+    }
+    free(raiz);
+    return q;
+}
+
+void removeNoVal(NO **raiz, int valor) {
+    NO *s, *t;
+    
+    s = busca(*raiz, valor);
+    
+    if( s==*raiz ){
+        *raiz = removeNo(s);
+    }
+    else {
+        t = s->pai;
+        if( s ==  t->esq){
+            t->esq = removeNo(t->esq);
+        }
+        else   {
+            t->dir  = removeNo(t->dir);
+        }
+    }
+}
+
 NO *busca( NO *no, int val ){
     if( no==NULL || no->valor == val ) 
         return no;
@@ -87,19 +143,23 @@ NO *busca( NO *no, int val ){
 
 int main() {
     NO *raiz = NULL;  // árvore vazia
+    NO *s,*t;
 
-    insereNo(&raiz, 5);
-    insereNo(&raiz, 7);
-    insereNo(&raiz, 9);
-    insereNo(&raiz, 12);
-    insereNo(&raiz, 2);
-    insereNo(&raiz, 1);
-    insereNo(&raiz, 14);
-    insereNo(&raiz, 8);
-    insereNo(&raiz, 3);
-    insereNo(&raiz, 4);
-    insereNo(&raiz, 11);
-    insereNo(&raiz, 5);
+    raiz = insereNo(raiz, 6);
+    raiz = insereNo(raiz, 7);
+    raiz = insereNo(raiz, 9);
+    raiz = insereNo(raiz, 12);
+    raiz = insereNo(raiz, 2);
+    raiz = insereNo(raiz, 1); 
+    raiz = insereNo(raiz, 14);
+    raiz = insereNo(raiz, 8);
+    raiz = insereNo(raiz, 3);
+    raiz = insereNo(raiz, 4);
+    raiz = insereNo(raiz, 11);
+    raiz = insereNo(raiz, 5);
+
+    // removeNoVal(&raiz, 5);
+    // removeNoVal(&raiz, 8);
 
     imprimeERD(raiz);
     // imprimeDRE(raiz);

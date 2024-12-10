@@ -4,16 +4,25 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-typedef struct no {
-    int valor;
-    struct no *esq;
-    struct no *dir;
-    struct no *pai;
-} NO;
+#include "arvore.h"
 
-NO *busca(NO *, int);
+NO *pai(NO *raiz, NO *noI) {
 
-NO *criaNo(int val, NO *pai) {
+    if( raiz == noI ) return NULL;
+
+    if( raiz->valor > noI->valor ) {    // está para o lado esquerdo
+        if( noI == raiz->esq )          // raiz é pai do noI
+            return raiz;
+        return pai( raiz->esq, noI );
+    }
+    else {                              // está para o lado  direito
+        if( noI == raiz->dir )
+            return raiz;
+        return pai( raiz->dir, noI);
+    }
+}
+
+NO *criaNo(int val) {
     NO *novoNo;
 
     novoNo = malloc( sizeof(NO));
@@ -24,41 +33,45 @@ NO *criaNo(int val, NO *pai) {
     novoNo->valor = val;
     novoNo->esq = NULL;
     novoNo->dir = NULL;
-    novoNo->pai = pai;
     return novoNo;
 }
 
 NO *insereNo(NO *raiz, int val ) {
 
     if( raiz==NULL) {
-       return criaNo(val, NULL);
+       return criaNo(val);
     }
 
     if( val > raiz->valor )  {   // maior
         if(raiz->dir==NULL)
-            raiz->dir = criaNo(val, raiz);
+            raiz->dir = criaNo(val);
         else
             insereNo(raiz->dir, val);
     }
     else {
         if(raiz->esq==NULL)
-            raiz->esq  = criaNo(val, raiz);
+            raiz->esq  = criaNo(val);
         else
             insereNo(raiz->esq, val);
     }
     return raiz;
 }
 
-NO *proximo(NO *no) {
+NO *proximo(NO *raiz, NO *no) {
+    NO *p;
+
     if(no->dir != NULL) {
-        NO *y = no->dir;
-        while( y->esq != NULL )
-            y = y->esq;
-        return y;
+        p = no->dir;
+        while( p->esq != NULL )
+            p = p->esq;
+        return p;
     }
-    while(no->pai != NULL && no->pai->dir == no )
-        no = no->pai;
-    return no->pai;
+
+    p = pai(raiz, no);
+    while(p != NULL && p->dir == no )
+        no = p;
+        p = (raiz, p );
+    return p;
 }
 
 void imprimeERD(NO *raiz) {
@@ -91,6 +104,16 @@ int altura(NO *no) {
         return aDir+1;
 }
 
+int profundidade(NO *raiz, NO *noI) {
+    if(raiz==NULL) return -1;
+    if( raiz->valor == noI->valor )
+        return 0;
+    if( raiz->valor > noI->valor )
+        return profundidade( raiz->esq, noI) + 1;
+    else
+        return profundidade( raiz->dir, noI) + 1;
+}
+
 NO *removeNo( NO *raiz ) {
     NO *p, *q;
 
@@ -113,7 +136,7 @@ NO *removeNo( NO *raiz ) {
 }
 
 void removeNoVal(NO **raiz, int valor) {
-    NO *s, *t;
+    NO *s, *p;
     
     s = busca(*raiz, valor);
     
@@ -121,12 +144,12 @@ void removeNoVal(NO **raiz, int valor) {
         *raiz = removeNo(s);
     }
     else {
-        t = s->pai;
-        if( s ==  t->esq){
-            t->esq = removeNo(t->esq);
+        p = pai(*raiz, s);
+        if( s ==  p->esq){
+            p->esq = removeNo(p->esq);
         }
         else   {
-            t->dir  = removeNo(t->dir);
+            p->dir  = removeNo(p->dir);
         }
     }
 }
@@ -140,6 +163,22 @@ NO *busca( NO *no, int val ){
         return busca( no->dir, val );
 }
 
+void imprimeNivel(NO *raiz, int alturaDesejada, int alturaCorrente){
+    if(raiz==NULL) return;
+
+    if( alturaDesejada == alturaCorrente) {
+        printf("%d ", raiz->valor);
+        return;
+    }   
+    imprimeNivel(raiz->esq, alturaDesejada, alturaCorrente+1 );
+    imprimeNivel(raiz->dir, alturaDesejada, alturaCorrente+1 );
+}
+
+void imprimeIrmaos(NO *raiz, NO *noI){
+    int p;
+    p = profundidade(raiz,noI);
+    imprimeNivel(raiz, p, 0);
+}
 
 int main() {
     NO *raiz = NULL;  // árvore vazia
@@ -150,18 +189,21 @@ int main() {
     raiz = insereNo(raiz, 9);
     raiz = insereNo(raiz, 12);
     raiz = insereNo(raiz, 2);
+    raiz = insereNo(raiz, 15);
     raiz = insereNo(raiz, 1); 
     raiz = insereNo(raiz, 14);
     raiz = insereNo(raiz, 8);
     raiz = insereNo(raiz, 3);
     raiz = insereNo(raiz, 4);
     raiz = insereNo(raiz, 11);
+    raiz = insereNo(raiz, 10);
+    raiz = insereNo(raiz, 13);
     raiz = insereNo(raiz, 5);
 
-    // removeNoVal(&raiz, 5);
-    // removeNoVal(&raiz, 8);
+    s = busca(raiz, 4);
+    imprimeIrmaos(raiz, s);
 
-    imprimeERD(raiz);
+    // imprimeERD(raiz);
     // imprimeDRE(raiz);
 
     printf("\nAltura da árvore: %d\n\n", altura(raiz));

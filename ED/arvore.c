@@ -15,7 +15,7 @@ NO *pai(NO *raiz, NO *noI) {
             return raiz;
         return pai( raiz->esq, noI );
     }
-    else {                              // está para o lado  direito
+    else {                             // está para o lado  direito
         if( noI == raiz->dir )
             return raiz;
         return pai( raiz->dir, noI);
@@ -36,12 +36,13 @@ NO *criaNo(int val) {
     return novoNo;
 }
 
+
+
 NO *insereNo(NO *raiz, int val ) {
 
     if( raiz==NULL) {
        return criaNo(val);
     }
-
     if( val > raiz->valor )  {   // maior
         if(raiz->dir==NULL)
             raiz->dir = criaNo(val);
@@ -49,6 +50,7 @@ NO *insereNo(NO *raiz, int val ) {
             insereNo(raiz->dir, val);
     }
     else {
+        if(val == raiz->valor) return NULL;
         if(raiz->esq==NULL)
             raiz->esq  = criaNo(val);
         else
@@ -56,6 +58,20 @@ NO *insereNo(NO *raiz, int val ) {
     }
     return raiz;
 }
+
+NO *ehAVL( NO *raiz ) {
+    int fb;
+    NO *p;
+    if(raiz==NULL) return NULL;
+    fb = FB(raiz);
+    if(fb>1 || fb<-1)
+        return raiz;
+    p = ehAVL( raiz->esq);
+    if(p) return p;
+    p = ehAVL(raiz->dir);
+    if(p) return p;
+    return NULL;
+}   
 
 NO *proximo(NO *raiz, NO *no) {
     NO *p;
@@ -104,6 +120,33 @@ int altura(NO *no) {
         return aDir+1;
 }
 
+int FB(NO *no) {  // Fator de Balanceamento
+    if(!no) return 0;
+    return altura( no->dir ) - altura( no->esq );
+}
+
+NO *rotacaoDireita( NO *raiz ){
+    NO *novaRaiz;
+    novaRaiz = raiz->esq;
+    raiz->esq = novaRaiz->dir;
+    novaRaiz->dir = raiz;
+    return novaRaiz;
+}
+NO *rotacaoEsquerda( NO *raiz ){
+    NO *novaRaiz;
+    novaRaiz = raiz->dir;
+    raiz->dir = novaRaiz->esq;
+    novaRaiz->esq = raiz;
+    return novaRaiz;
+}
+NO *rotacaoDuplaDireita( NO *raiz ) {
+    raiz->esq = rotacaoEsquerda( raiz->esq );
+    return rotacaoDireita( raiz );
+}
+NO *rotacaoDuplaEsquerda( NO *raiz ) {
+    raiz->dir = rotacaoDireita( raiz->dir );
+    return rotacaoEsquerda( raiz );
+}
 int profundidade(NO *raiz, NO *noI) {
     if(raiz==NULL) return -1;
     if( raiz->valor == noI->valor )
@@ -180,6 +223,7 @@ void imprimeIrmaos(NO *raiz, NO *noI){
     imprimeNivel(raiz, p, 0);
 }
 
+
 int main() {
     NO *raiz = NULL;  // árvore vazia
     NO *s,*t;
@@ -200,11 +244,9 @@ int main() {
     raiz = insereNo(raiz, 13);
     raiz = insereNo(raiz, 5);
 
-    s = busca(raiz, 4);
-    imprimeIrmaos(raiz, s);
-
-    // imprimeERD(raiz);
-    // imprimeDRE(raiz);
-
+    s = ehAVL(raiz);
+    if(s) {
+        printf("Nó %d  FB: %d", s->valor, FB(s));
+    }
     printf("\nAltura da árvore: %d\n\n", altura(raiz));
 }

@@ -40,22 +40,29 @@ NO *criaNo(int val) {
 
 NO *insereNo(NO *raiz, int val ) {
 
+    int fb;
+
     if( raiz==NULL) {
        return criaNo(val);
     }
-    if( val > raiz->valor )  {   // maior
-        if(raiz->dir==NULL)
-            raiz->dir = criaNo(val);
-        else
-            insereNo(raiz->dir, val);
+    if( val > raiz->valor )    // maior
+        raiz->dir = insereNo( raiz_dir, val);
+    else if (val < raiz->valor) {
+        raiz->esq = insereNo( raiz_esq, val);
     }
-    else {
-        if(val == raiz->valor) return NULL;
-        if(raiz->esq==NULL)
-            raiz->esq  = criaNo(val);
-        else
-            insereNo(raiz->esq, val);
+    else return raiz;      // Chave duplicada não permitida
+
+    fb = FB(raiz);
+
+    if( fb>1 ) {
+
+
     }
+    if( fb<-1 ){
+
+
+    }
+
     return raiz;
 }
 
@@ -228,21 +235,34 @@ int main() {
     NO *raiz = NULL;  // árvore vazia
     NO *s,*t;
 
-    raiz = insereNo(raiz, 6);
-    raiz = insereNo(raiz, 7);
-    raiz = insereNo(raiz, 9);
-    raiz = insereNo(raiz, 12);
+    // raiz = insereNo(raiz, 6);
+    // raiz = insereNo(raiz, 7);
+    // raiz = insereNo(raiz, 9);
+    // raiz = insereNo(raiz, 12);
+    // raiz = insereNo(raiz, 2);
+    // raiz = insereNo(raiz, 15);
+    // raiz = insereNo(raiz, 1); 
+    // raiz = insereNo(raiz, 14);
+    // raiz = insereNo(raiz, 8);
+    // raiz = insereNo(raiz, 3);
+    // raiz = insereNo(raiz, 4);
+    // raiz = insereNo(raiz, 11);
+    // raiz = insereNo(raiz, 10);
+    // raiz = insereNo(raiz, 13);
+    // raiz = insereNo(raiz, 5);
+
+    raiz = insereNo(raiz, 1);
     raiz = insereNo(raiz, 2);
-    raiz = insereNo(raiz, 15);
-    raiz = insereNo(raiz, 1); 
-    raiz = insereNo(raiz, 14);
-    raiz = insereNo(raiz, 8);
     raiz = insereNo(raiz, 3);
     raiz = insereNo(raiz, 4);
-    raiz = insereNo(raiz, 11);
-    raiz = insereNo(raiz, 10);
-    raiz = insereNo(raiz, 13);
     raiz = insereNo(raiz, 5);
+    raiz = insereNo(raiz, 6);
+    raiz = insereNo(raiz, 7);
+    raiz = insereNo(raiz, 8);
+    raiz = insereNo(raiz, 9);
+    raiz = insereNo(raiz, 10);
+    raiz = insereNo(raiz, 11);
+
 
     s = ehAVL(raiz);
     if(s) {

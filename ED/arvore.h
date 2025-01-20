@@ -18,6 +18,7 @@ void removeNoVal(NO **, int );
 NO *busca( NO *, int  );
 void imprimeNivel(NO *, int , int );
 int profundidade(NO *, NO *);
+NO *ehAVL( NO *);
 
 NO *rotacaoDireita( NO * );
 NO *rotacaoDuplaDireita( NO * );

@@ -46,20 +46,25 @@ NO *insereNo(NO *raiz, int val ) {
        return criaNo(val);
     }
     if( val > raiz->valor )    // maior
-        raiz->dir = insereNo( raiz_dir, val);
+        raiz->dir = insereNo( raiz->dir, val);
     else if (val < raiz->valor) {
-        raiz->esq = insereNo( raiz_esq, val);
+        raiz->esq = insereNo( raiz->esq, val);
     }
     else return raiz;      // Chave duplicada não permitida
 
     fb = FB(raiz);
 
     if( fb>1 ) {
-
-
+        if ( FB(raiz->dir) >= 0)
+            raiz = rotacaoEsquerda(raiz);
+        else
+            raiz = rotacaoDuplaEsquerda(raiz);
     }
     if( fb<-1 ){
-
+        if ( FB(raiz->esq) >= 0)
+            raiz = rotacaoDireita(raiz);
+        else
+            raiz = rotacaoDuplaDireita(raiz);
 
     }
 

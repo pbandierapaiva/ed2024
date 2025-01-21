@@ -1,4 +1,4 @@
-/* Cadastro.h */
+/* cadastro.h */
 
 
 #define TAM_LINHA_MAX 1000
@@ -9,6 +9,7 @@ typedef struct REG {
 	char nome[200];
 	char lotacao[100];
 	char funcao[100];
+	char cargo[100];
 	} REGISTRO;
 
 

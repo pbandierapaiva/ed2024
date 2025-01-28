@@ -30,6 +30,15 @@ NO_CAD *criaNo(REGISTRO r) {
     return novoNo;
 }
 
+int altura(NO_CAD *raiz) {
+    int adir,aesq;
+
+    if(!raiz) return 0;
+    adir = altura(raiz->dir);
+    aesq = altura(raiz->esq);
+    if(adir>aesq) return adir+1;
+    else return aesq+1;
+}
 
 NO_CAD *insereNo(NO_CAD *raiz, REGISTRO r ) {
     int cmp;
@@ -96,13 +105,16 @@ int main() {
 
 	fclose(arquivo);
 
-    //imprimeOrdenado(raiz);
+    //imprimeOrdenado(raiz);dir
 
-    printf("\nEntre com nome completo: ");
-    fgets( strbusca, 100, stdin);
-    strbusca[ strlen(strbusca)-1 ] = '\0';
+    // printf("\nEntre com nome completo: ");
+    // fgets( strbusca, 100, stdin);
+    // strbusca[ strlen(strbusca)-1 ] = '\0';
 
-    buscaABB(raiz,strbusca);
+    // buscaABB(raiz,strbusca);
+    printf("Altura da árvore: %d\n", altura(raiz));
+    buscaABB(raiz,"PAULO BANDIERA PAIVA");
+
 
 	return 0;
 }

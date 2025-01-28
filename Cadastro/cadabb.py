@@ -1,10 +1,13 @@
 
 
 def leCSV():
-    arq = open("/home/paiva/Downloads/Unifesp-24r.csv","r")
+    arvore = No()
 
+    arq = open("/home/paiva/Downloads/Unifesp-24r.csv","r")
+    # arq = open("/home/pub/ed/Cadastro.csv")
     linha = arq.readline()
 
+    i=0
     while(linha):
         campos = linha.strip().split(";")
         id = campos[0][1:-1]
@@ -13,22 +16,44 @@ def leCSV():
         cargo = campos[4][1:-1]
         func = campos[11][1:-1]
 
-
-
-
+        arvore.insere( Registro(id, nome, lotacao, cargo, func))
         linha = arq.readline()
+        i+=1
 
+    return arvore
 
+class Registro:
+    def __init__(self, pId, pNome, pLotacao, pCargo, pFuncao):
+        self.id = pId
+        self.nome = pNome
+        self.lotacao = pLotacao
+        self.cargo = pCargo
+        self.funcao = pFuncao
+    def __gt__(self, d):
+        return self.nome > d.nome
+    def __eq__(self, d):
+        return self.nome == d.nome
+    def __lt__(self, d):
+        return self.nome < d.nome
+    def __str__(self):
+        return self.nome +"\n"+self.lotacao +"\n"+self.cargo+"\n"+self.funcao
+   
 
 class No:
     def __init__(self, pDado=None):
-        self.dado = pDado
+        if type(pDado)==Registro:
+            self.dado = pDado
+        else:
+            self.dado=None
         self.esq = None
         self.dir = None
 
     def insere(self, pDado):
-        if self.dado==None:
+        if type(pDado)!=Registro:
+            raise TypeError("Somente insira dados do tipo Registro")
+        if type(self.dado)!=Registro:
             self.dado = pDado
+            return
         if self.dado > pDado:
             if self.esq: # Não é nulo
                 self.esq.insere(pDado)
@@ -38,8 +63,23 @@ class No:
             if self.dir:
                 self.dir.insere(pDado)
             else:
-                self.dir = No(pDado)
-    
+                self.dir = No(pDado)    
+        else:
+            return
+
+        ## Mantém árvore AVL
+        fb = self.FB()
+        if fb>1:
+            if  self.dir.FB() >= 0:
+                self.rotacaoEsquerda()
+            else:
+                self.rotacaoDuplaEsquerda()
+        if fb<-1:
+            if  self.esq.FB() <= 0:
+                self.rotacaoDireita()
+            else:
+                self.rotacaoDuplaDireita()
+   
     def imprimeERD(self):
         if self.esq:
             self.esq.imprimeERD()
@@ -47,9 +87,21 @@ class No:
         if self.dir:
             self.dir.imprimeERD()
     
+    def buscaNome(self, pNome):
+        if self.dado.nome == pNome:
+            print(self.dado)
+            return True
+        encontrou = False
+        if self.esq:
+            encontrou = self.esq.buscaNome(pNome)
+            if encontrou: return True
+        if self.dir:
+            encontrou = self.dir.buscaNome(pNome)
+            if encontrou: return True
+   
     def altura(self):
         hEsq = hDir=0
-        if self.dado==None:
+        if type(self.dado)!=Registro:
             return 0
         if self.esq:
             hEsq = self.esq.altura()
@@ -61,7 +113,7 @@ class No:
             return hDir+1
 
     def FB(self):
-        if self.dado==None:
+        if type(self.dado)!=Registro:
             return 0
     
         if self.dir!=None:
@@ -91,7 +143,6 @@ class No:
         q.dir = tc
 
     def rotacaoEsquerda(self):
-
         aux = self.dado
         self.dado = self.dir.dado
         self.dir.dado = aux
@@ -107,30 +158,35 @@ class No:
         q.dir = tb
 
     def rotacaoDuplaDireita(self):
+        if self.esq==None:
+            return
         self.esq.rotacaoEsquerda()
         self.rotacaoDireita()
     
     def rotacaoDuplaEsquerda(self):
+        if self.dir==None:
+            return
         self.dir.rotacaoDireita()
-        self.rotacaoEsquerda()        
+        self.rotacaoEsquerda()   
 
-arvore = No()
-arvore.insere(6)
-arvore.insere(4)
-arvore.insere(9)
-arvore.insere(3)
-arvore.insere(5)
+    def ehAVL(self):
+        fb = self.FB()
+        if(fb>1 or fb<-1):
+            return False
+        avl = True
+        if self.esq:
+            avl = self.esq.ehAVL()
+        if self.dir and avl:
+            avl = self.dir.ehAVL()
+        return avl
 
-print("FB antes: ",arvore.FB())
-arvore.rotacaoDuplaDireita()
-print("FB depois: ",arvore.FB())
+arvCad = leCSV()
 
-# arvore.imprimeERD()
-print("Altura da árvore: ", arvore.altura() )
+# arvCad.imprimeERD()
+print("Altura da árvore: ", arvCad.altura() )
+print("É AVL") if  arvCad.ehAVL() else  print("Não é AVL")     
 
-
-    
-
+arvCad.buscaNome("PAULO BANDIERA PAIVA")
 
 
 
